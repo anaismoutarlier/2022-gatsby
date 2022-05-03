@@ -4,7 +4,7 @@ import { Link, graphql } from "gatsby"
 import Title from "../components/Title"
 
 // markup
-const IndexPage = ({ data: { allMdx: { edges: posts } } }) => {
+const IndexPage = ({ data: { allContentfulPost: { edges: posts } } }) => {
   console.log(posts)
   return (
     <div>
@@ -13,7 +13,7 @@ const IndexPage = ({ data: { allMdx: { edges: posts } } }) => {
       <Link to="/about">About</Link>
       <ul>
         {
-          posts.map(({ node }) => <Link to={ node.slug}><li>{ node.frontmatter.title } - { node.frontmatter.date }</li></Link>)
+          posts.map(({ node }) => <Link to={ node.slug }><li>{ node.title } - { node.creationDate }</li></Link>)
         }
       </ul>
     </div>
@@ -22,18 +22,29 @@ const IndexPage = ({ data: { allMdx: { edges: posts } } }) => {
 
 export const query = graphql`
 query {
-  allMdx(sort: { fields: frontmatter___date, order: ASC }) {
+  allContentfulPost(sort: { fields: creationDate, order: ASC }) {
     edges {
       node {
         id
-        frontmatter {
-          date(formatString: "D MMMM YYYY")
-          title
-        }
+        contentful_id
         slug
+        title
+        creationDate(formatString: "D MMMM YYYY")
       }
     }
   }
 }`
 
+// allMdx(sort: { fields: frontmatter___date, order: ASC }) {
+//   edges {
+//     node {
+//       id
+//       frontmatter {
+//         date(formatString: "D MMMM YYYY")
+//         title
+//       }
+//       slug
+//     }
+//   }
+// }
 export default IndexPage
